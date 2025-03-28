@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANITAH MEDICAL CENTRE</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #0d6efd;
+            color: white;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .dashboard-card {
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-3">
+                    <h3 class="text-center">DANITAH MEDICAL</h3>
+                    <hr>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="dashboard-link">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="patients-link">Patients</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="transactions-link">Transactions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="inventory-link">Inventory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="services-link">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="reports-link">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#" id="settings-link">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section">
+                    <h2>Dashboard</h2>
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-4">
+                            <div class="card bg-primary text-white dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Today's Patients</h5>
+                                    <h2 class="card-text" id="today-patients">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card bg-success text-white dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Today's Revenue</h5>
+                                    <h2 class="card-text" id="today-revenue">UGX 0</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card bg-warning text-dark dashboard-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Low Stock Items</h5>
+                                    <h2 class="card-text" id="low-stock">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Recent Patients</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table" id="recent-patients">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Recent Transactions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table" id="recent-transactions">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Patient</th>
+                                                <th>Amount</th>
+                                                <th>Method</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patients Section -->
+                <div id="patients-section" style="display: none;">
+                    <h2>Patient Management</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary mb-3" id="add-patient-btn">Add New Patient</button>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped" id="patients-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Patient ID</th>
+                                                <th>Full Name</th>
+                                                <th>Phone</th>
+                                                <th>Type</th>
+                                                <th>Last Visit</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Section -->
+                <div id="transactions-section" style="display: none;">
+                    <h2>Transaction Management</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary mb-3" id="new-transaction-btn">New Transaction</button>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped" id="transactions-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Transaction ID</th>
+                                                <th>Patient</th>
+                                                <th>Date</th>
+                                                <th>Service</th>
+                                                <th>Amount</th>
+                                                <th>Payment Method</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Section -->
+                <div id="inventory-section" style="display: none;">
+                    <h2>Inventory Management</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary mb-3" id="add-item-btn">Add New Item</button>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped" id="inventory-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Item ID</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Supplier</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                <div id="services-section" style="display: none;">
+                    <h2>Services Management</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary mb-3" id="add-service-btn">Add New Service</button>
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped" id="services-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Service ID</th>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Price</th>
+                                                <th>Duration</th>
+                                                <th>Description</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Will be populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Section -->
+                <div id="reports-section" style="display: none;">
+                    <h2>Reports</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Generate Report</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="report-form">
+                                        <div class="mb-3">
+                                            <label for="report-type" class="form-label">Report Type</label>
+                                            <select class="form-select" id="report-type">
+                                                <option value="daily">Daily Report</option>
+                                                <option value="weekly">Weekly Report</option>
+                                                <option value="monthly">Monthly Report</option>
+                                                <option value="custom">Custom Date Range</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3" id="custom-date-range" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="start-date" class="form-label">Start Date</label>
+                                                    <input type="date" class="form-control" id="start-date">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="end-date" class="form-label">End Date</label>
+                                                    <input type="date" class="form-control" id="end-date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Generate</button>
+                                        <button type="button" class="btn btn-success" id="export-report-btn">Export to Excel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Report Summary</h5>
+                                </div>
+                                <div class="card-body" id="report-summary">
+                                    <!-- Report summary will be displayed here -->
+                                    <p>Select report type and generate to view summary.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div id="settings-section" style="display: none;">
+                    <h2>System Settings</h2>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Notification Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="notification-settings">
+                                        <div class="mb-3">
+                                            <label for="admin-email" class="form-label">Admin Email</label>
+                                            <input type="email" class="form-control" id="admin-email" value="dainelssempebwa3@gmail.com">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Notification Types</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="notify-transactions" checked>
+                                                <label class="form-check-label" for="notify-transactions">New Transactions</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="notify-low-stock" checked>
+                                                <label class="form-check-label" for="notify-low-stock">Low Stock Alerts</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="notify-daily-summary" checked>
+                                                <label class="form-check-label" for="notify-daily-summary">Daily Summary</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Payment Settings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="payment-settings">
+                                        <div class="mb-3">
+                                            <label for="mtn-number" class="form-label">MTN Mobile Money Number</label>
+                                            <input type="text" class="form-control" id="mtn-number" value="+256708515107">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="airtel-number" class="form-label">Airtel Money Number</label>
+                                            <input type="text" class="form-control" id="airtel-number" value="+256765210136">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Payment Methods</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="cash-payment" checked>
+                                                <label class="form-check-label" for="cash-payment">Cash</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="mtn-payment" checked>
+                                                <label class="form-check-label" for="mtn-payment">MTN Mobile Money</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="airtel-payment" checked>
+                                                <label class="form-check-label" for="airtel-payment">Airtel Money</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Patient Modal -->
+    <div class="modal fade" id="patientModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="patientModalTitle">Add New Patient</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="patient-form">
+                        <input type="hidden" id="patient-id">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="first-name" class="form-label">First Name*</label>
+                                    <input type="text" class="form-control" id="first-name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="last-name" class="form-label">Last Name*</label>
+                                    <input type="text" class="form-control" id="last-name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dob" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dob">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number*</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" rows="2"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="patient-type" class="form-label">Patient Type*</label>
+                                    <select class="form-select" id="patient-type" required>
+                                        <option value="OPD">OPD (Outpatient)</option>
+                                        <option value="IPD">IPD (Inpatient)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="insurance" class="form-label">Insurance Provider</label>
+                                    <input type="text" class="form-control" id="insurance">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medical-history" class="form-label">Medical History</label>
+                            <textarea class="form-control" id="medical-history" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-patient-btn">Save Patient</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div class="modal fade" id="transactionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transactionModalTitle">New Transaction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="transaction-form">
+                        <input type="hidden" id="transaction-id">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transaction-patient" class="form-label">Patient*</label>
+                                    <select class="form-select" id="transaction-patient" required>
+                                        <option value="">Select Patient</option>
+                                        <!-- Will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transaction-date" class="form-label">Date*</label>
+                                    <input type="datetime-local" class="form-control" id="transaction-date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transaction-service" class="form-label">Service*</label>
+                            <select class="form-select" id="transaction-service" required>
+                                <option value="">Select Service</option>
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transaction-amount" class="form-label">Amount (UGX)*</label>
+                                    <input type="number" class="form-control" id="transaction-amount" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="transaction-payment-method" class="form-label">Payment Method*</label>
+                                    <select class="form-select" id="transaction-payment-method" required>
+                                        <option value="Cash">Cash</option>
+                                        <option value="MTN Mobile Money">MTN Mobile Money</option>
+                                        <option value="Airtel Money">Airtel Money</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3" id="mobile-money-details" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="mobile-number" class="form-label">Mobile Number*</label>
+                                    <input type="tel" class="form-control" id="mobile-number">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="transaction-id-input" class="form-label">Transaction ID*</label>
+                                    <input type="text" class="form-control" id="transaction-id-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="transaction-notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="transaction-notes" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-transaction-btn">Save Transaction</button>
+                    <button type="button" class="btn btn-success" id="print-receipt-btn">Print Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Inventory Item Modal -->
+    <div class="modal fade" id="inventoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inventoryModalTitle">Add Inventory Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inventory-form">
+                        <input type="hidden" id="inventory-id">
+                        <div class="mb-3">
+                            <label for="item-name" class="form-label">Item Name*</label>
+                            <input type="text" class="form-control" id="item-name" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="item-category" class="form-label">Category*</label>
+                                    <select class="form-select" id="item-category" required>
+                                        <option value="Medication">Medication</option>
+                                        <option value="Medical Supplies">Medical Supplies</option>
+                                        <option value="Equipment">Equipment</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="item-quantity" class="form-label">Quantity*</label>
+                                    <input type="number" class="form-control" id="item-quantity" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="item-price" class="form-label">Unit Price (UGX)*</label>
+                                    <input type="number" class="form-control" id="item-price" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="item-threshold" class="form-label">Low Stock Threshold</label>
+                                    <input type="number" class="form-control" id="item-threshold" value="5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-supplier" class="form-label">Supplier</label>
+                            <input type="text" class="form-control" id="item-supplier">
+                        </div>
+                        <div class="mb-3">
+                            <label for="item-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="item-description" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-inventory-btn">Save Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div class="modal fade" id="serviceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="serviceModalTitle">Add Service</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="service-form">
+                        <input type="hidden" id="service-id">
+                        <div class="mb-3">
+                            <label for="service-name" class="form-label">Service Name*</label>
+                            <input type="text" class="form-control" id="service-name" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="service-category" class="form-label">Category*</label>
+                                    <select class="form-select" id="service-category" required>
+                                        <option value="Consultation">Consultation</option>
+                                        <option value="Laboratory">Laboratory</option>
+                                        <option value="Pharmacy">Pharmacy</option>
+                                        <option value="Procedure">Procedure</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="service-price" class="form-label">Price (UGX)*</label>
+                                    <input type="number" class="form-control" id="service-price" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="service-duration" class="form-label">Duration (minutes)</label>
+                                    <input type="number" class="form-control" id="service-duration">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="service-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="service-description" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-service-btn">Save Service</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Receipt</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="receipt-content">
+                    <!-- Receipt content will be generated here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="print-receipt-final-btn">Print Receipt</button>
+                    <button type="button" class="btn btn-success" id="email-receipt-btn">Email Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmation-message">
+                    Are you sure you want to perform this action?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirm-action-btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        // Main Application Script
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the application
+            initApp();
+        });
+
+        function initApp() {
+            // Navigation
+            setupNavigation();
+            
+            // Initialize modals
+            setupModals();
+            
+            // Load initial data
+            loadDashboardData();
+            loadPatients();
+            loadTransactions();
+            loadInventory();
+            loadServices();
+            
+            // Setup event listeners
+            setupEventListeners();
+        }
+
+        function setupNavigation() {
+            const sections = ['dashboard', 'patients', 'transactions', 'inventory', 'services', 'reports', 'settings'];
+            
+            sections.forEach(section => {
+                document.getElementById(`${section}-link`).addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Hide all sections
+                    sections.forEach(s => {
+                        document.getElementById(`${s}-section`).style.display = 'none';
+                    });
+                    // Show selected section
+                    document.getElementById(`${section}-section`).style.display = 'block';
+                });
+            });
+        }
+
+        function setupModals() {
+            // Patient modal
+            const patientModal = new bootstrap.Modal(document.getElementById('patientModal'));
+            
+            document.getElementById('add-patient-btn').addEventListener('click', function() {
+                document.getElementById('patientModalTitle').textContent = 'Add New Patient';
+                document.getElementById('patient-form').reset();
+                document.getElementById('patient-id').value = '';
+                patientModal.show();
+            });
+            
+            // Transaction modal
+            const transactionModal = new bootstrap.Modal(document.getElementById('transactionModal'));
+            
+            document.getElementById('new-transaction-btn').addEventListener('click', function() {
+                document.getElementById('transactionModalTitle').textContent = 'New Transaction';
+                document.getElementById('transaction-form').reset();
+                document.getElementById('transaction-id').value = '';
+                document.getElementById('transaction-date').value = new Date().toISOString().slice(0, 16);
+                transactionModal.show();
+            });
+            
+            // Payment method change handler
+            document.getElementById('transaction-payment-method').addEventListener('change', function() {
+                const method = this.value;
+                const mobileMoneyDetails = document.getElementById('mobile-money-details');
+                
+                if (method.includes('Mobile Money') || method.includes('Airtel Money')) {
+                    mobileMoneyDetails.style.display = 'block';
+                    document.getElementById('mobile-number').required = true;
+                    document.getElementById('transaction-id-input').required = true;
+                } else {
+                    mobileMoneyDetails.style.display = 'none';
+                    document.getElementById('mobile-number').required = false;
+                    document.getElementById('transaction-id-input').required = false;
+                }
+            });
+            
+            // Inventory modal
+            const inventoryModal = new bootstrap.Modal(document.getElementById('inventoryModal'));
+            
+            document.getElementById('add-item-btn').addEventListener('click', function() {
+                document.getElementById('inventoryModalTitle').textContent = 'Add Inventory Item';
+                document.getElementById('inventory-form').reset();
+                document.getElementById('inventory-id').value = '';
+                inventoryModal.show();
+            });
+            
+            // Service modal
+            const serviceModal = new bootstrap.Modal(document.getElementById('serviceModal'));
+            
+            document.getElementById('add-service-btn').addEventListener('click', function() {
+                document.getElementById('serviceModalTitle').textContent = 'Add Service';
+                document.getElementById('service-form').reset();
+                document.getElementById('service-id').value = '';
+                serviceModal.show();
+            });
+            
+            // Receipt modal
+            const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+            
+            document.getElementById('print-receipt-btn').addEventListener('click', function() {
+                generateReceipt();
+                receiptModal.show();
+            });
+            
+            document.getElementById('print-receipt-final-btn').addEventListener('click', function() {
+                printReceipt();
+            });
+            
+            // Confirmation modal
+            const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        }
+
+        function setupEventListeners() {
+            // Save buttons
+            document.getElementById('save-patient-btn').addEventListener('click', savePatient);
+            document.getElementById('save-transaction-btn').addEventListener('click', saveTransaction);
+            document.getElementById('save-inventory-btn').addEventListener('click', saveInventoryItem);
+            document.getElementById('save-service-btn').addEventListener('click', saveService);
+            
+            // Report form
+            document.getElementById('report-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateReport();
+            });
+            
+            document.getElementById('report-type').addEventListener('change', function() {
+                const customDateRange = document.getElementById('custom-date-range');
+                if (this.value === 'custom') {
+                    customDateRange.style.display = 'block';
+                } else {
+                    customDateRange.style.display = 'none';
+                }
+            });
+            
+            // Export report
+            document.getElementById('export-report-btn').addEventListener('click', exportReport);
+            
+            // Settings forms
+            document.getElementById('notification-settings').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveNotificationSettings();
+            });
+            
+            document.getElementById('payment-settings').addEventListener('submit', function(e) {
+                e.preventDefault();
+                savePaymentSettings();
+            });
+            
+            // Email receipt
+            document.getElementById('email-receipt-btn').addEventListener('click', emailReceipt);
+        }
+
+        // Data loading functions
+        function loadDashboardData() {
+            // In a real app, this would fetch from an API
+            // For demo purposes, we'll use mock data
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Mock data
+            const mockPatients = [
+                { id: 'P1001', name: 'John Doe', type: 'OPD', time: '09:30 AM' },
+                { id: 'P1002', name: 'Jane Smith', type: 'IPD', time: '10:15 AM' },
+                { id: 'P1003', name: 'Robert Johnson', type: 'OPD', time: '11:45 AM' },
+                { id: 'P1004', name: 'Mary Williams', type: 'OPD', time: '01:30 PM' },
+                { id: 'P1005', name: 'Michael Brown', type: 'IPD', time: '03:15 PM' }
+            ];
+            
+            const mockTransactions = [
+                { id: 'T2001', patient: 'John Doe', amount: 'UGX 50,000', method: 'Cash' },
+                { id: 'T2002', patient: 'Jane Smith', amount: 'UGX 120,000', method: 'MTN Mobile Money' },
+                { id: 'T2003', patient: 'Robert Johnson', amount: 'UGX 75,000', method: 'Cash' },
+                { id: 'T2004', patient: 'Mary Williams', amount: 'UGX 35,000', method: 'Airtel Money' },
+                { id: 'T2005', patient: 'Michael Brown', amount: 'UGX 200,000', method: 'Cash' }
+            ];
+            
+            // Update dashboard counters
+            document.getElementById('today-patients').textContent = mockPatients.length;
+            document.getElementById('today-revenue').textContent = 'UGX 480,000'; // Sum of mock transactions
+            document.getElementById('low-stock').textContent = '3'; // Mock low stock items
+            
+            // Populate recent patients table
+            const recentPatientsTable = document.getElementById('recent-patients').getElementsByTagName('tbody')[0];
+            recentPatientsTable.innerHTML = '';
+            
+            mockPatients.forEach(patient => {
+                const row = recentPatientsTable.insertRow();
+                row.innerHTML = `
+                    <td>${patient.id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.type}</td>
+                    <td>${patient.time}</td>
+                `;
+            });
+            
+            // Populate recent transactions table
+            const recentTransactionsTable = document.getElementById('recent-transactions').getElementsByTagName('tbody')[0];
+            recentTransactionsTable.innerHTML = '';
+            
+            mockTransactions.forEach(transaction => {
+                const row = recentTransactionsTable.insertRow();
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.patient}</td>
+                    <td>${transaction.amount}</td>
+                    <td>${transaction.method}</td>
+                `;
+            });
+        }
+
+        function loadPatients() {
+            // Mock patient data
+            const mockPatients = [
+                { id: 'P1001', name: 'John Doe', phone: '+256712345678', type: 'OPD', lastVisit: '2023-06-15' },
+                { id: 'P1002', name: 'Jane Smith', phone: '+256712345679', type: 'IPD', lastVisit: '2023-06-14' },
+                { id: 'P1003', name: 'Robert Johnson', phone: '+256712345670', type: 'OPD', lastVisit: '2023-06-13' },
+                { id: 'P1004', name: 'Mary Williams', phone: '+256712345671', type: 'OPD', lastVisit: '2023-06-12' },
+                { id: 'P1005', name: 'Michael Brown', phone: '+256712345672', type: 'IPD', lastVisit: '2023-06-11' },
+                { id: 'P1006', name: 'Sarah Davis', phone: '+256712345673', type: 'OPD', lastVisit: '2023-06-10' },
+                { id: 'P1007', name: 'David Miller', phone: '+256712345674', type: 'OPD', lastVisit: '2023-06-09' }
+            ];
+            
+            // Populate patients table
+            const patientsTable = document.getElementById('patients-table').getElementsByTagName('tbody')[0];
+            patientsTable.innerHTML = '';
+            
+            mockPatients.forEach(patient => {
+                const row = patientsTable.insertRow();
+                row.innerHTML = `
+                    <td>${patient.id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.phone}</td>
+                    <td>${patient.type}</td>
+                    <td>${patient.lastVisit}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-patient" data-id="${patient.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-patient" data-id="${patient.id}">Delete</button>
+                    </td>
+                `;
+            });
+            
+            // Populate patient dropdown in transaction form
+            const patientDropdown = document.getElementById('transaction-patient');
+            patientDropdown.innerHTML = '<option value="">Select Patient</option>';
+            
+            mockPatients.forEach(patient => {
+                const option = document.createElement('option');
+                option.value = patient.id;
+                option.textContent = `${patient.name} (${patient.id})`;
+                patientDropdown.appendChild(option);
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-patient').forEach(button => {
+                button.addEventListener('click', function() {
+                    const patientId = this.getAttribute('data-id');
+                    editPatient(patientId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-patient').forEach(button => {
+                button.addEventListener('click', function() {
+                    const patientId = this.getAttribute('data-id');
+                    confirmDelete('patient', patientId);
+                });
+            });
+        }
+
+        function loadTransactions() {
+            // Mock transaction data
+            const mockTransactions = [
+                { id: 'T2001', patient: 'John Doe (P1001)', date: '2023-06-15 09:30', service: 'Consultation', amount: '50000', method: 'Cash', status: 'Completed' },
+                { id: 'T2002', patient: 'Jane Smith (P1002)', date: '2023-06-15 10:15', service: 'Lab Test', amount: '120000', method: 'MTN Mobile Money', status: 'Completed' },
+                { id: 'T2003', patient: 'Robert Johnson (P1003)', date: '2023-06-15 11:45', service: 'Pharmacy', amount: '75000', method: 'Cash', status: 'Completed' },
+                { id: 'T2004', patient: 'Mary Williams (P1004)', date: '2023-06-15 13:30', service: 'Consultation', amount: '35000', method: 'Airtel Money', status: 'Completed' },
+                { id: 'T2005', patient: 'Michael Brown (P1005)', date: '2023-06-15 15:15', service: 'Procedure', amount: '200000', method: 'Cash', status: 'Pending' }
+            ];
+            
+            // Populate transactions table
+            const transactionsTable = document.getElementById('transactions-table').getElementsByTagName('tbody')[0];
+            transactionsTable.innerHTML = '';
+            
+            mockTransactions.forEach(transaction => {
+                const row = transactionsTable.insertRow();
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.patient}</td>
+                    <td>${transaction.date}</td>
+                    <td>${transaction.service}</td>
+                    <td>UGX ${parseInt(transaction.amount).toLocaleString()}</td>
+                    <td>${transaction.method}</td>
+                    <td><span class="badge ${transaction.status === 'Completed' ? 'bg-success' : 'bg-warning'}">${transaction.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-transaction" data-id="${transaction.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-transaction" data-id="${transaction.id}">Delete</button>
+                    </td>
+                `;
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-transaction').forEach(button => {
+                button.addEventListener('click', function() {
+                    const transactionId = this.getAttribute('data-id');
+                    editTransaction(transactionId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-transaction').forEach(button => {
+                button.addEventListener('click', function() {
+                    const transactionId = this.getAttribute('data-id');
+                    confirmDelete('transaction', transactionId);
+                });
+            });
+        }
+
+        function loadInventory() {
+            // Mock inventory data
+            const mockInventory = [
+                { id: 'I3001', name: 'Paracetamol', category: 'Medication', quantity: 50, price: '2000', supplier: 'Pharma UG', status: 'In Stock' },
+                { id: 'I3002', name: 'Bandages', category: 'Medical Supplies', quantity: 120, price: '500', supplier: 'MediSupplies', status: 'In Stock' },
+                { id: 'I3003', name: 'Antibiotics', category: 'Medication', quantity: 3, price: '15000', supplier: 'Pharma UG', status: 'Low Stock' },
+                { id: 'I3004', name: 'Syringes', category: 'Medical Supplies', quantity: 200, price: '300', supplier: 'MediSupplies', status: 'In Stock' },
+                { id: 'I3005', name: 'Blood Pressure Monitor', category: 'Equipment', quantity: 2, price: '250000', supplier: 'MediTech', status: 'In Stock' },
+                { id: 'I3006', name: 'Painkillers', category: 'Medication', quantity: 4, price: '3000', supplier: 'Pharma UG', status: 'Low Stock' }
+            ];
+            
+            // Populate inventory table
+            const inventoryTable = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
+            inventoryTable.innerHTML = '';
+            
+            mockInventory.forEach(item => {
+                const row = inventoryTable.insertRow();
+                row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${item.category}</td>
+                    <td>${item.quantity}</td>
+                    <td>UGX ${parseInt(item.price).toLocaleString()}</td>
+                    <td>${item.supplier}</td>
+                    <td><span class="badge ${item.status === 'In Stock' ? 'bg-success' : 'bg-warning'}">${item.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-item" data-id="${item.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-item" data-id="${item.id}">Delete</button>
+                    </td>
+                `;
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    editInventoryItem(itemId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    confirmDelete('inventory', itemId);
+                });
+            });
+        }
+
+        function loadServices() {
+            // Mock services data
+            const mockServices = [
+                { id: 'S4001', name: 'General Consultation', category: 'Consultation', price: '30000', duration: '30', description: 'General doctor consultation' },
+                { id: 'S4002', name: 'Blood Test', category: 'Laboratory', price: '50000', duration: '15', description: 'Complete blood count test' },
+                { id: 'S4003', name: 'X-Ray', category: 'Procedure', price: '100000', duration: '45', description: 'X-Ray imaging' },
+                { id: 'S4004', name: 'Dental Checkup', category: 'Consultation', price: '40000', duration: '30', description: 'Dental examination' },
+                { id: 'S4005', name: 'Ultrasound', category: 'Procedure', price: '120000', duration: '60', description: 'Ultrasound imaging' }
+            ];
+            
+            // Populate services table
+            const servicesTable = document.getElementById('services-table').getElementsByTagName('tbody')[0];
+            servicesTable.innerHTML = '';
+            
+            mockServices.forEach(service => {
+                const row = servicesTable.insertRow();
+                row.innerHTML = `
+                    <td>${service.id}</td>
+                    <td>${service.name}</td>
+                    <td>${service.category}</td>
+                    <td>UGX ${parseInt(service.price).toLocaleString()}</td>
+                    <td>${service.duration} mins</td>
+                    <td>${service.description}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary edit-service" data-id="${service.id}">Edit</button>
+                        <button class="btn btn-sm btn-danger delete-service" data-id="${service.id}">Delete</button>
+                    </td>
+                `;
+            });
+            
+            // Populate service dropdown in transaction form
+            const serviceDropdown = document.getElementById('transaction-service');
+            serviceDropdown.innerHTML = '<option value="">Select Service</option>';
+            
+            mockServices.forEach(service => {
+                const option = document.createElement('option');
+                option.value = service.id;
+                option.textContent = `${service.name} (UGX ${parseInt(service.price).toLocaleString()})`;
+                serviceDropdown.appendChild(option);
+            });
+            
+            // Add event listeners for edit and delete buttons
+            document.querySelectorAll('.edit-service').forEach(button => {
+                button.addEventListener('click', function() {
+                    const serviceId = this.getAttribute('data-id');
+                    editService(serviceId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-service').forEach(button => {
+                button.addEventListener('click', function() {
+                    const serviceId = this.getAttribute('data-id');
+                    confirmDelete('service', serviceId);
+                });
+            });
+        }
+
+        // CRUD Operations
+        function savePatient() {
+            const patientId = document.getElementById('patient-id').value;
+            const isNew = patientId === '';
+            
+            // Get form data
+            const patientData = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                patientType: document.getElementById('patient-type').value,
+                insurance: document.getElementById('insurance').value,
+                medicalHistory: document.getElementById('medical-history').value
+            };
+            
+            // Validate required fields
+            if (!patientData.firstName || !patientData.lastName || !patientData.phone || !patientData.patientType) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // In a real app, this would send data to the server
+            console.log('Saving patient:', patientData);
+            
+            // Show success message
+            alert(`Patient ${isNew ? 'added' : 'updated'} successfully!`);
+            
+            // Close modal and refresh data
+            bootstrap.Modal.getInstance(document.getElementById('patientModal')).hide();
+            loadPatients();
+            loadDashboardData();
+        }
+
+        function saveTransaction() {
+            const transactionId = document.getElementById('transaction-id').value;
+            const isNew = transactionId === '';
+            
+            // Get form data
+            const transactionData = {
+                patientId: document.getElementById('transaction-patient').value,
+                date: document.getElementById('transaction-date').value,
+                serviceId: document.getElementById('transaction-service').value,
+                amount: document.getElementById('transaction-amount').value,
+                paymentMethod: document.getElementById('transaction-payment-method').value,
+                mobileNumber: document.getElementById('mobile-number').value,
+                transactionId: document.getElementById('transaction-id-input').value,
+                notes: document.getElementById('transaction-notes').value
+            };
+            
+            // Validate required fields
+            if (!transactionData.patientId || !transactionData.date || !transactionData.serviceId || 
+                !transactionData.amount || !transactionData.paymentMethod) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate mobile money details if payment method is mobile money
+            if ((transactionData.paymentMethod.includes('Mobile Money') || 
+                 transactionData.paymentMethod.includes('Airtel Money')) && 
+                (!transactionData.mobileNumber || !transactionData.transactionId)) {
+                alert('Please provide mobile number and transaction ID for mobile money payments');
+                return;
+            }
+            
+            // In a real app, this would send data to the server
+            console.log('Saving transaction:', transactionData);
+            
+            // Show success message
+            alert(`Transaction ${isNew ? 'added' : 'updated'} successfully!`);
+            
+            // Close modal and refresh data
+            bootstrap.Modal.getInstance(document.getElementById('transactionModal')).hide();
+            loadTransactions();
+            loadDashboardData();
+            
+            // Generate receipt
+            generateReceipt();
+            bootstrap.Modal.getInstance(document.getElementById('receiptModal')).show();
+        }
+
+        function saveInventoryItem() {
+            const itemId = document.getElementById('inventory-id').value;
+            const isNew = itemId === '';
+            
+            // Get form data
+            const itemData = {
+                name: document.getElementById('item-name').value,
+                category: document.getElementById('item-category').value,
+                quantity: document.getElementById('item-quantity').value,
+                price: document.getElementById('item-price').value,
+                threshold: document.getElementById('item-threshold').value,
+                supplier: document.getElementById('item-supplier').value,
+                description: document.getElementById('item-description').value
+            };
+            
+            // Validate required fields
+            if (!itemData.name || !itemData.category || !itemData.quantity || !itemData.price) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // In a real app, this would send data to the server
+            console.log('Saving inventory item:', itemData);
+            
+            // Show success message
+            alert(`Inventory item ${isNew ? 'added' : 'updated'} successfully!`);
+            
+            // Close modal and refresh data
+            bootstrap.Modal.getInstance(document.getElementById('inventoryModal')).hide();
+            loadInventory();
+            loadDashboardData();
+        }
+
+        function saveService() {
+            const serviceId = document.getElementById('service-id').value;
+            const isNew = serviceId === '';
+            
+            // Get form data
+            const serviceData = {
+                name: document.getElementById('service-name').value,
+                category: document.getElementById('service-category').value,
+                price: document.getElementById('service-price').value,
+                duration: document.getElementById('service-duration').value,
+                description: document.getElementById('service-description').value
+            };
+            
+            // Validate required fields
+            if (!serviceData.name || !serviceData.category || !serviceData.price) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // In a real app, this would send data to the server
+            console.log('Saving service:', serviceData);
+            
+            // Show success message
+            alert(`Service ${isNew ? 'added' : 'updated'} successfully!`);
+            
+            // Close modal and refresh data
+            bootstrap.Modal.getInstance(document.getElementById('serviceModal')).hide();
+            loadServices();
+        }
+
+        function editPatient(patientId) {
+            // In a real app, this would fetch patient data from the server
+            // For demo, we'll just show the modal with the ID set
+            
+            document.getElementById('patientModalTitle').textContent = 'Edit Patient';
+            document.getElementById('patient-id').value = patientId;
+            
+            // Here you would populate the form with the patient's data
+            // For demo, we'll just show empty form
+            
+            bootstrap.Modal.getInstance(document.getElementById('patientModal')).show();
+        }
+
+        function editTransaction(transactionId) {
+            // In a real app, this would fetch transaction data from the server
+            // For demo, we'll just show the modal with the ID set
+            
+            document.getElementById('transactionModalTitle').textContent = 'Edit Transaction';
+            document.getElementById('transaction-id').value = transactionId;
+            
+            // Here you would populate the form with the transaction's data
+            // For demo, we'll just show empty form
+            
+            bootstrap.Modal.getInstance(document.getElementById('transactionModal')).show();
+        }
+
+        function editInventoryItem(itemId) {
+            // In a real app, this would fetch item data from the server
+            // For demo, we'll just show the modal with the ID set
+            
+            document.getElementById('inventoryModalTitle').textContent = 'Edit Inventory Item';
+            document.getElementById('inventory-id').value = itemId;
+            
+            // Here you would populate the form with the item's data
+            // For demo, we'll just show empty form
+            
+            bootstrap.Modal.getInstance(document.getElementById('inventoryModal')).show();
+        }
+
+        function editService(serviceId) {
+            // In a real app, this would fetch service data from the server
+            // For demo, we'll just show the modal with the ID set
+            
+            document.getElementById('serviceModalTitle').textContent = 'Edit Service';
+            document.getElementById('service-id').value = serviceId;
+            
+            // Here you would populate the form with the service's data
+            // For demo, we'll just show empty form
+            
+            bootstrap.Modal.getInstance(document.getElementById('serviceModal')).show();
+        }
+
+        function confirmDelete(type, id) {
+            const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const confirmButton = document.getElementById('confirm-action-btn');
+            
+            confirmationMessage.textContent = `Are you sure you want to delete this ${type} (ID: ${id})? This action cannot be undone.`;
+            
+            // Remove previous event listener
+            confirmButton.replaceWith(confirmButton.cloneNode(true));
+            document.getElementById('confirm-action-btn').addEventListener('click', function() {
+                deleteItem(type, id);
+                confirmationModal.hide();
+            });
+            
+            confirmationModal.show();
+        }
+
+        function deleteItem(type, id) {
+            // In a real app, this would send a delete request to the server
+            console.log(`Deleting ${type} with ID: ${id}`);
+            
+            // Show success message
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`);
+            
+            // Refresh the appropriate data
+            switch(type) {
+                case 'patient':
+                    loadPatients();
+                    break;
+                case 'transaction':
+                    loadTransactions();
+                    break;
+                case 'inventory':
+                    loadInventory();
+                    break;
+                case 'service':
+                    loadServices();
+                    break;
+            }
+            
+            loadDashboardData();
+        }
+
+        // Report and Receipt Functions
+        function generateReport() {
+            const reportType = document.getElementById('report-type').value;
+            let startDate, endDate;
+            
+            if (reportType === 'custom') {
+                startDate = document.getElementById('start-date').value;
+                endDate = document.getElementById('end-date').value;
+                
+                if (!startDate || !endDate) {
+                    alert('Please select both start and end dates');
+                    return;
+                }
+            } else {
+                const today = new Date();
+                
+                if (reportType === 'daily') {
+                    startDate = endDate = today.toISOString().split('T')[0];
+                } else if (reportType === 'weekly') {
+                    const dayOfWeek = today.getDay();
+                    const diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // adjust when day is Sunday
+                    startDate = new Date(today.setDate(diff)).toISOString().split('T')[0];
+                    endDate = new Date(today.setDate(diff + 6)).toISOString().split('T')[0];
+                } else if (reportType === 'monthly') {
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+                    endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+                }
+            }
+            
+            // In a real app, this would fetch report data from the server
+            console.log(`Generating ${reportType} report from ${startDate} to ${endDate}`);
+            
+            // Mock report data
+            const mockReportData = {
+                totalPatients: 24,
+                totalRevenue: 1850000,
+                transactions: [
+                    { date: '2023-06-01', count: 5, amount: 350000 },
+                    { date: '2023-06-02', count: 3, amount: 220000 },
+                    { date: '2023-06-03', count: 6, amount: 480000 },
+                    { date: '2023-06-04', count: 4, amount: 310000 },
+                    { date: '2023-06-05', count: 6, amount: 490000 }
+                ],
+                topServices: [
+                    { name: 'General Consultation', count: 12, amount: 360000 },
+                    { name: 'Blood Test', count: 8, amount: 400000 },
+                    { name: 'X-Ray', count: 3, amount: 300000 },
+                    { name: 'Dental Checkup', count: 5, amount: 200000 },
+                    { name: 'Ultrasound', count: 2, amount: 240000 }
+                ],
+                paymentMethods: [
+                    { method: 'Cash', count: 10, amount: 650000 },
+                    { method: 'MTN Mobile Money', count: 8, amount: 600000 },
+                    { method: 'Airtel Money', count: 6, amount: 600000 }
+                ]
+            };
+            
+            // Display report summary
+            const reportSummary = document.getElementById('report-summary');
+            reportSummary.innerHTML = `
+                <h4>${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report (${startDate} to ${endDate})</h4>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Patients</h5>
+                                <h2 class="card-text">${mockReportData.totalPatients}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Revenue</h5>
+                                <h2 class="card-text">UGX ${mockReportData.totalRevenue.toLocaleString()}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Transactions</h5>
+                                <h2 class="card-text">${mockReportData.transactions.reduce((sum, t) => sum + t.count, 0)}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>Daily Transactions</h5>
+                        <canvas id="dailyTransactionsChart" height="200"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Payment Methods</h5>
+                        <canvas id="paymentMethodsChart" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h5>Top Services</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Count</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${mockReportData.topServices.map(service => `
+                                    <tr>
+                                        <td>${service.name}</td>
+                                        <td>${service.count}</td>
+                                        <td>UGX ${service.amount.toLocaleString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            // Create charts
+            createDailyTransactionsChart(mockReportData.transactions);
+            createPaymentMethodsChart(mockReportData.paymentMethods);
+        }
+
+        function createDailyTransactionsChart(transactions) {
+            const ctx = document.getElementById('dailyTransactionsChart').getContext('2d');
+            
+            const dates = transactions.map(t => t.date);
+            const counts = transactions.map(t => t.count);
+            const amounts = transactions.map(t => t.amount / 1000); // Convert to thousands for better scaling
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Number of Transactions',
+                            data: counts,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Amount (Thousands UGX)',
+                            data: amounts,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                            type: 'line',
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Number of Transactions'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Amount (Thousands UGX)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPaymentMethodsChart(paymentMethods) {
+            const ctx = document.getElementById('paymentMethodsChart').getContext('2d');
+            
+            const methods = paymentMethods.map(p => p.method);
+            const amounts = paymentMethods.map(p => p.amount);
+            
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: methods,
+                    datasets: [{
+                        data: amounts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = Math.round((value / total) * 100);
+                                    return `${label}: UGX ${value.toLocaleString()} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function exportReport() {
+            // Get the report summary table
+            const reportSummary = document.getElementById('report-summary');
+            const tables = reportSummary.getElementsByTagName('table');
+            
+            if (tables.length === 0) {
+                alert('No report data to export');
+                return;
+            }
+            
+            // Convert table to worksheet
+            const ws = XLSX.utils.table_to_sheet(tables[0]);
+            
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Report");
+            
+            // Generate file name
+            const reportType = document.getElementById('report-type').value;
+            const fileName = `Danitah_Medical_${reportType}_Report_${new Date().toISOString().slice(0, 10)}.xlsx`;
+            
+            // Export to Excel
+            XLSX.writeFile(wb, fileName);
+        }
+
+        function generateReceipt() {
+            // In a real app, this would use the actual transaction data
+            // For demo, we'll use mock data
+            
+            const receiptContent = document.getElementById('receipt-content');
+            
+            const transactionData = {
+                id: 'T' + Math.floor(1000 + Math.random() * 9000),
+                date: new Date().toLocaleString(),
+                patient: document.getElementById('transaction-patient').options[document.getElementById('transaction-patient').selectedIndex].text,
+                service: document.getElementById('transaction-service').options[document.getElementById('transaction-service').selectedIndex].text,
+                amount: document.getElementById('transaction-amount').value,
+                paymentMethod: document.getElementById('transaction-payment-method').value,
+                mobileNumber: document.getElementById('mobile-number').value,
+                transactionId: document.getElementById('transaction-id-input').value
+            };
+            
+            receiptContent.innerHTML = `
+                <div class="text-center mb-4">
+                    <h3>DANITAH MEDICAL CENTRE</h3>
+                    <p>Receipt for Payment</p>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>Receipt No:</strong> ${transactionData.id}
+                    </div>
+                    <div class="col-6 text-end">
+                        <strong>Date:</strong> ${transactionData.date}
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Patient:</strong> ${transactionData.patient}
+                </div>
+                
+                <div class="mb-3">
+                    <strong>Service:</strong> ${transactionData.service}
+                </div>
+                
+                <table class="table table-bordered mb-4">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount (UGX)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>${transactionData.service.split('(')[0].trim()}</td>
+                            <td class="text-end">${parseInt(transactionData.amount).toLocaleString()}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end"><strong>Total:</strong></td>
+                            <td class="text-end"><strong>${parseInt(transactionData.amount).toLocaleString()}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="mb-3">
+                    <strong>Payment Method:</strong> ${transactionData.paymentMethod}
+                </div>
+                
+                ${transactionData.paymentMethod.includes('Mobile Money') || transactionData.paymentMethod.includes('Airtel Money') ? `
+                    <div class="mb-3">
+                        <strong>Mobile Number:</strong> ${transactionData.mobileNumber}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Transaction ID:</strong> ${transactionData.transactionId}
+                    </div>
+                ` : ''}
+                
+                <div class="mt-4 pt-3 border-top text-center">
+                    <p>Thank you for choosing Danitah Medical Centre</p>
+                    <p>For inquiries, call: +256708515107 or +256765210136</p>
+                </div>
+            `;
+        }
+
+        function printReceipt() {
+            const receiptContent = document.getElementById('receipt-content').innerHTML;
+            const originalContent = document.body.innerHTML;
+            
+            document.body.innerHTML = receiptContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            
+            // Reinitialize the app after printing
+            initApp();
+        }
+
+        function emailReceipt() {
+            // In a real app, this would send the receipt to the patient's email
+            alert('Receipt has been emailed to the patient');
+        }
+
+        // Settings Functions
+        function saveNotificationSettings() {
+            const email = document.getElementById('admin-email').value;
+            const notifyTransactions = document.getElementById('notify-trans
